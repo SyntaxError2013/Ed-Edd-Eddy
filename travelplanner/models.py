@@ -21,5 +21,5 @@ class Activity(models.Model):
     """
     Comments on markers
     """
-    map_point = models.ForeignKey(Map)
+    place = models.ForeignKey(Places)
     comment = models.TextField()
