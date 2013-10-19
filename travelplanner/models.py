@@ -5,8 +5,11 @@ from django.db import models
 class Travel(models.Model):
     name = models.CharField(max_length=200)
     uri = models.CharField(max_length=11, unique=True)
-
-class Map(models.Model):
+    
+class Places(models.Model):
+    """
+    Markers on map
+    """
     travel = models.ForeignKey(Travel)
     latti = models.FloatField()
     longi = models.FloatField()
@@ -15,5 +18,8 @@ class Map(models.Model):
     date_time = models.DateTimeField()
 
 class Activity(models.Model):
+    """
+    Comments on markers
+    """
     map_point = models.ForeignKey(Map)
     comment = models.TextField()
