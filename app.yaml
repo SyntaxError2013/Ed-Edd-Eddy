@@ -1,0 +1,18 @@
+application: django-demoapp
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+
+- url: /.*
+  script: syntaxerror.wsgi.application
+  
+libraries:
+
+- name: django
+  version: "1.4"
+  
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'syntaxerror.settings'
