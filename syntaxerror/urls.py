@@ -5,5 +5,5 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', include('travelplanner.urls'))
+    url(r'^travel/', include('travelplanner.urls'))
 )

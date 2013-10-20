@@ -13,13 +13,13 @@ class Places(models.Model):
     travel = models.ForeignKey(Travel)
     latti = models.FloatField()
     longi = models.FloatField()
-    properties = models.TextField()
-    location_name = models.CharField(max_length=200)
-    date_time = models.DateTimeField()
+    properties = models.TextField(null=True)
+    location_name = models.CharField(max_length=200, null=True)
+    date_time = models.DateTimeField(null=True)
 
 class Activity(models.Model):
     """
     Comments on markers
     """
     place = models.ForeignKey(Places)
-    comment = models.TextField()
+    comment = models.TextField(blank=False)
