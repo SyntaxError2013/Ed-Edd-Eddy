@@ -180,22 +180,24 @@ def map_get_places(request):
         place = Places.objects.filter(travel=travel)
         places_json = serializers.serialize('json', place)
         return HttpResponse(places_json, content_type="application/json")
-    return HttpResonse('[]')
+    return HttpResonse('[]', content_type="application/json")
 
 @csrf_exempt
 def place_get_activities(request):
     if(request.method=='POST'):
+        print request.POST
         place_id = request.POST.get('place_id', None)
         
         try:
             place = Places.objects.get(id=place_id)
-            activity = Activity.objects.filter(place=place)
-            activity_json = serializers.serialize('json', activity)
-        return HttpResponse(activity_json, content_type="application/json")
-        except Travel.DoesNotExist:
+            if place is not None:
+                activity = Activity.objects.filter(place=place)
+                activity_json = serializers.serialize('json', activity)
+                return HttpResponse(activity_json, content_type="application/json")
+        except Places.DoesNotExist:
             place = None
         
-    return HttpResonse('[]')
+    return HttpResponse('[]', content_type="application/json")
 
 @csrf_exempt
 def invite_friends(request):

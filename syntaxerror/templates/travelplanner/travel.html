@@ -264,9 +264,10 @@ function showMarker(LatLong)
 	});
 }
 
+var gg;
 function callbackGetplaces(places)
 {
-	console.log("callbackGetplaces:" +places);
+//	console.log("callbackGetplaces:" +places);
 	//places = data;
 	for(var i=0; i<places.length; ++i )
 	{
@@ -276,8 +277,7 @@ function callbackGetplaces(places)
 		markers.push(LatLong)
 		showMarker(LatLong) ;
 		place = places[i]['fields'] ;
-		var place_id = places[i]['fields'].place_id ;
-		PopulateSidePlaces(place) ;
+		PopulateSidePlaces(places[i]['pk'], places[i]['fields'].location_name) ;
 	}
 	return data;
 }
@@ -285,14 +285,17 @@ function callbackGetplaces(places)
 var g ;
 function callbackGetactivities(activities)
 {
-
-	g = activities ;
-	console.log(g);
-	$('#pn_'+activities[0]['fields'].place_id).append('<ul class="place_comments"> ') ;
-		for(var i=0; i< activities.length; ++i)
-			$('#pn_'+placeObject.place_id).append('	<li>'+ activities[i]['fields'].comment + '</li>');
-	$('#pn_'+activities[0]['fields'].place_id).append('</ul> ') ;
-
+	if(activities.length  > 0)
+	{
+		str = ''; 
+		g = activities ;
+		console.log(g.length);
+		str +='<ul class="place_comments"> ' ;
+			for(var i=0; i< activities.length; ++i)
+				str+='<li>'+ activities[i]['fields'].comment + '</li>';
+		str+= '<li > <span class="add_activity"  > add activity</span> </li>'
+		$('#pn_'+activities[0]['pk']).append(str + '</ul> ') ;
+	}
 }
 
 function GetActivities(place_id)
@@ -304,17 +307,18 @@ function GetActivities(place_id)
 	Push2Db(url, data, callbackGetactivities);
 }
 
-function PopulateSidePlaces (placeObject) 
+function PopulateSidePlaces (place_id, location_name) 
 {
 	
-	$('#place_node_wrap').append('<div class="place_node" id="pn_' + placeObject.place_id +'">'+
+	$('#place_node_wrap').append('<div class="place_node" id="pn_' + place_id +'">'+
 					'<div class="place_bar">'+
 						'<div class="place_marker"><i class="icon-map-marker"></i></div>'+
-						'<div class="place_name">'+place.location_name+'</div>'+
-						'<div class="date_time">'+'19th October 2014, 2:00 PM <ADD DATE TIME > '+'</div>'+
+						'<div class="place_name">'+location_name+'</div>'+
+						'<div class="date_time">'+'19th October 2014, 2:00 PM ADD DATE TIME > '+'</div>'+
 					'</div>'+
 				'</div>');
-	 GetActivities(placeObject.place_id);
+	console.log("place id sent"+ place_id);
+	 GetActivities(place_id);
 
 
 
