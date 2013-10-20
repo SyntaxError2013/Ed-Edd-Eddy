@@ -1,39 +1,85 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Simple markers</title>
-    <style>
-      html, body, #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-      }
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <script>
-function initialize() {
-  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
-  var mapOptions = {
-    zoom: 4,
-    center: myLatlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+<head>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <!--	<script type="text/javascript" src="/static/map.js" > -->
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Simple markers</title>
+  <style>
+  html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
   }
-  var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+   #target {
+        width: 345px;
+      }
+  </style>
+  <script>
+  var map;
+  
+  function initialize() {
+    var markers = [];
+    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+    var mapOptions = {
+      zoom: 4,
+      center: myLatlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-  var marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
       position: myLatlng,
       map: map,
       title: 'Hello World!'
+    });
+
+    google.maps.event.addListener(map, 'click', function(event) {
+      addMarker(event.latLng);
+    });
+  }
+var geocoder ;
+  function getNameFromLatLong(latlng)
+  { 
+   geocoder = new google.maps.Geocoder();
+  var name ;
+  geocoder.geocode({'latLng': latlng}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        console.log(results[1]) ;
+     //   ob.itle = results[1].formatted_address;
+      } else {
+           console.log("ul") ;
+        name =  'Unknown Location';
+      }
+    } else {
+      console.log("gf") ;
+      name =  'Geocoder failed ';
+    }
   });
-}
+  return name;
+  }
+  function addMarker(location) {
+    var marker = new google.maps.Marker({
+      position: location,
+      map: map ,
 
-google.maps.event.addDomListener(window, 'load', initialize);
+     // title : getNameFromLatLong(location)
+    });
+   google.maps.event.addListener(marker, 'click', function(event) {
+   marker.setMap(null);
+    });
 
-    </script>
-  </head>
-  <body>
-    <div id="map-canvas"></div>
-  </body>
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+</head>
+<body>
+   <div id="panel">
+      <input id="target" type="text" placeholder="Search Box">
+    </div>
+  <div id="map-canvas"></div>
+</body>
 </html>
