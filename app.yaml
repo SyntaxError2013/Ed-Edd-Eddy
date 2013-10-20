@@ -6,6 +6,9 @@ threadsafe: true
 
 handlers:
 
+- url: /static
+  static_dir: static
+
 - url: /.*
   script: syntaxerror.wsgi.application
   
