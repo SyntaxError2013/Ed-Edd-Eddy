@@ -118,6 +118,24 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
   PopulatePlaces(map);
 } // END OF INITIALIZE
 
+function SetTitle(location,m)
+{
+	geocoder = new google.maps.Geocoder();
+	geocoder.geocode({'latLng': location}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+   
+        m.title = results[1].formatted_address;
+        console.log('title set');
+    
+      } else {
+        console.log('No results found');
+      }
+    } else {
+      console.log('Geocoder failed due to: ' + status);
+    }
+  });
+}
 function addMarker(location,map, add2Db) {
 	if(add2Db)
  		AddPlace(location);
@@ -129,9 +147,8 @@ function addMarker(location,map, add2Db) {
     //  draggable: true,
       map: map ,
 
-     // title : getNameFromLatLong(location)
     });
-  
+    SetTitle(location,marker);
 
   google.maps.event.addListener(marker, 'click', function(event) {
   	var index = markers.indexOf(marker.position);
@@ -201,6 +218,7 @@ function showMarker(LatLong)
    map: map
 	};
 	var marker = new google.maps.Marker(myMarkerOptions);
+	SetTitle(LatLong, marker);
 }
 
 function callbackGetplaces(places)
