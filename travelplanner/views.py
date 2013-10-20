@@ -33,6 +33,7 @@ def travel(request, travel_uri):
 @csrf_exempt
 def travel_name_edit(request):
     if request.method == 'POST':
+        print request.POST
         travel_uri = request.POST.get('travel_uri', None) 
         name = request.POST.get('name', None)
 

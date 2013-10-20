@@ -1,0 +1,297 @@
+
+#container
+{
+	width:100%;
+	height:100%;
+}
+
+#header
+{
+	width:100%;
+	height:50px;
+	background-color:#444;
+	position:fixed;
+	top:0px;
+	z-index:2;
+}
+
+#logo
+{
+	width:120px;
+	height:35px;
+	margin-right:20px;
+	float:left;
+	background-image:url('../images/logo.png');
+	background-repeat:no-repeat;
+	margin-left:20px;
+	margin-top:8px;
+}
+
+#search_wrap
+{
+	height:30px;
+	width:500px;
+	margin-top:10px;
+	float:left;
+	background-color:#fff;
+	border-radius:2px;
+}
+
+#search
+{
+	width:420px;
+	height:28px;
+	float:left;
+	border:0px;
+	border-top-left-radius:2px;
+	border-bottom-left-radius:2px;
+	padding-left:8px;
+}
+
+
+#search:focus
+{
+	outline:none;
+}
+
+#search_button
+{
+	width:70px;
+	height:30px;
+	float:right;
+	background-color:#0c99f6;
+	border-top-right-radius:2px;
+	border-bottom-right-radius:2px;
+	cursor:pointer;
+	color:#fff;
+	line-height:30px;
+	text-align:center;
+	font-size:13px;
+}
+
+#search_button:hover
+{
+	background-color:#23A7FD;
+}
+
+#controls_wrap
+{
+	position:fixed;
+	top:0px;
+	right:0px;
+	width:480px;
+	height:50px;
+}
+
+#add_friends
+{
+	float:left;
+	margin-top:10px;
+	border-radius:2px;
+	background-color:#0c99f6;
+	height:30px;
+	line-height:30px;
+	font-size:13px;
+	font-family:"Arial","sans-serif";
+	color:#fff;
+	padding:0px 12px;
+	cursor:pointer;
+}
+
+#add_friends:hover
+{
+	background-color:#23A7FD;
+}
+
+
+.plus
+{
+	margin-right:8px;
+}
+
+#user_details
+{
+	float:right;
+	margin-top:10px;
+	height:30px;
+}
+
+#user_pic
+{
+	height:30px;
+	width:30px;
+	background-color:#525252;
+	float:right;
+	border-radius:2px;
+	margin-right:20px;
+}
+
+#user_name
+{
+	float:right;
+	height:30px;
+	line-height:30px;
+	font-size:13px;
+	font-family:"Arial","sans-serif";
+	color:#aaa;
+	margin-right:10px;
+}
+
+#map_wrap
+{
+	position:fixed;
+	top:50px;
+	left:0px;
+	right:480px;
+	bottom:0px;
+	/*background-color:#eee;*/
+}
+
+#page_wrap
+{
+	position:fixed;
+	top:50px;
+	right:0px;
+	bottom:0px;
+	width:480px;
+	box-shadow:-1px 0px 4px #555;
+	background-color:#fff;
+}
+
+.page
+{
+	width:457px;
+	margin-left:20px;
+
+}
+
+.trip_name
+{
+	width:100%;
+	height:70px;
+	margin-bottom:20px;
+	border-bottom:1px solid #eee;
+	line-height:70px;
+	text-align:center; 
+	font-size:24px;
+	color:#333;
+	font-weight:bold;
+}
+
+.trip_settings
+{
+	float:right;
+	margin-top:20px;
+	height:20px;
+	width:20px;
+	color:#888;
+	background-color:#ddd;
+	font-size:14px;
+	line-height:20px;
+	border-radius:2px;
+}
+
+.place_node
+{
+	margin-bottom:50px;
+}
+
+.place_bar
+{
+	height:20px;
+	margin-bottom:20px;
+}
+
+.place_marker
+{
+	float:left;
+	width:20px;
+	color:#dd4b39;
+	font-size:16px;
+	height:20px;.
+}
+
+.place_name
+{
+	font-size:16px;
+	font-weight:bold;
+	font-family:"Arial","sans-serif";
+	color:#333;
+	height:20px;
+	line-height:20px;
+	float:left;
+	margin-right:10px;
+}
+
+.date_time
+{
+	height:20px;
+	border-radius:2px;
+	padding:0px 5px;
+	line-height:20px;
+	color:#333;
+	font-size:12px;
+	float:left;
+	background-color:#eee;
+}
+
+
+.place_comments
+{
+	color:#333;
+	font-family:"Arial","sans-serif";
+	font-size:13px;
+}
+.place_comments li
+{
+	margin-bottom:10px;
+}
+
+.comment_text
+{
+	width:370px;
+}
+.comment_remove
+{
+	width:20px;
+	height:20px;
+	background-color:#eee;
+	color:#333;
+	font-size:13px;
+	line-height:20px;
+	text-align:center;
+}
+
+.comment_remove:hover
+{
+	color:#0C99F6;
+}
+
+
+@media (max-width: 1280px) {
+  #controls_wrap
+    {
+	 width:360px;
+  }
+  
+   #page_wrap
+    {
+	 width:360px;
+  }
+  
+  .page
+    {
+	width:337px;
+	}
+	
+	#map_wrap
+{
+	position:fixed;
+	top:50px;
+	left:0px;
+	right:360px;
+	bottom:0px;
+	background-color:#eee;
+}
+  
+}
