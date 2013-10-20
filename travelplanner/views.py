@@ -3,11 +3,18 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core import serializers
+from django.shortcuts import redirect
 
 from travelplanner.models import *
+from travelplanner.utils import travel_uri_generator
 
 def index(request):
-    return render_to_response('travelplanner/index.html')
+    travel_uri = travel_uri_generator()
+    try:
+        Travel.objects.get(uri=travel_uri)
+        return HttpResponse('Some error occured. Try again!')
+    except:
+        return redirect('/travel/'+travel_uri)
 
 def travel(request, travel_uri):
     return render_to_response('travelplanner/travel.html', {'travel_uri': travel_uri})
