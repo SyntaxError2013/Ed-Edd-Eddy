@@ -13,12 +13,17 @@
 	}
 
 	</style>
-	<link rel="stylesheet" href="../../../static/css/normalize.css" type="text/css">
-	<link rel="stylesheet" href="../../../static/css/style.css" type="text/css">
-	<link rel="stylesheet" href="../../../static/css/nanoscroller.min.css" type="text/css">
-	<link rel="stylesheet" href="../../../static/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/style.css" type="text/css">
+	<link rel="stylesheet" href="/static/css/nanoscroller.min.css" type="text/css">
+	<link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/reveal.css">
+	<script src="/static/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+	<script src="/static/js/jquery.reveal.js" type="text/javascript"></script>
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script src="../../../static/js/nanoscroller.min.js" type="text/javascript"></script>
+	<script src="/static/js/nanoscroller.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/_ah/channel/jsapi"></script>
+	<script src="/static/js/realtime.js" type="text/javascript"></script>
 	<!--[if IE 7]>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome-ie7.min.css">
     <![endif]-->
@@ -361,11 +366,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 				<div id="search_button"><i class="icon-search"></i></div>
 			</div>
 			<div id="controls_wrap">
-				<div id="add_friends"><i class="plus icon-plus-sign-alt"></i>Add Friends</div>
-				<div id="user_details">
-					<div id="user_pic"></div>
-					<div id="user_name">Nitesh Kumar</div>
-				</div>
+                <a href="#" data-reveal-id="myModal"><div id="add_friends"><i class="plus icon-plus-sign-alt"></i>Add Friends</div></a>
 			</div>
 		</div>
 	
@@ -459,10 +460,42 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			</div>
 			</div>
 		</div>
+    <div id="myModal" class="reveal-modal">
+     <h3 style="text-align:center;">Invite your friends to this trip.</h3>
+     <p style="text-align:center;">Enter you friends' email ID's seperated by a comma (,)</p>
+     <input class="pop_up" type="text" id="invite-friends"></div>
+     <a class="close-reveal-modal">&#215;</a>
+    </div>
+
+    <div id="myModal" class="reveal-modal">
+     <h3 style="text-align:center;">Please enter your email address for future editing.</h3>
+     <input class="pop_up" type="text" id="set-email"></div>
+     <a class="close-reveal-modal">&#215;</a>
+    </div>
 </body>
 
 <script>
 	//	$(document).load($(".nano").nanoScroller());
 		
 	</script>
+        <script>
+            var channel = new goog.appengine.Channel('{{ token }}');
+            var socket = channel.open();
+            var onOpened = function() {
+                console.log('opened');
+            }
+            socket.onopen = onOpened;
+            socket.onmessage = onMessage;
+            socket.onerror = onError;
+            socket.onclose = onClose;
+            var onMessage = function(data) {
+                console.log('on message');
+            }
+            onError = function() {
+                console.log('on error');
+            }
+            onClose = function() {
+                console.log('on close');
+            }
+        </script>
 </html>

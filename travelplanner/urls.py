@@ -8,6 +8,7 @@ urlpatterns = patterns('travelplanner.views',
         (r'^api/set-email$', 'set_my_email'),
         (r'^api/invite-friends$', 'invite_friends'),
 
+        (r'^api/travel-get-name$', 'travel_get_name'),
         (r'^api/travel-name-edit$', 'travel_name_edit'),
         (r'^api/map/add-place$', 'map_add_place'),
         (r'^api/map/remove-place$', 'map_remove_place'),
