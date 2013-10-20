@@ -33,14 +33,16 @@ border: 1px solid #999;
 
 function PopulatePlaces(map)
 {
-	places = GetPlaces();
-}
+	var places = GetPlaces();
 
+}
+var markers = [];
+var map;
 function initialize() {
 var delhi = new google.maps.LatLng(28.613459424004414,77.16796875);
-	var markers = [];
+	
 	var SearchMarkers = [];
-	var map = new google.maps.Map(document.getElementById('map-canvas'), {
+	 map = new google.maps.Map(document.getElementById('map-canvas'), {
 		 zoom: 4,
 		center: delhi,
 mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -109,11 +111,17 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
 
 // ADD  AND DELETE MARKER 
  google.maps.event.addListener(map, 'click', function(event) {
-      addMarker(event.latLng);
+      addMarker(event.latLng,map, 1);
     });
 
- function addMarker(location) {
- 	AddPlace(location);
+ 
+  PopulatePlaces(map);
+} // END OF INITIALIZE
+
+function addMarker(location,map, add2Db) {
+	if(add2Db)
+ 		AddPlace(location);
+
  	markers.push(location);
     console.log(location) ;
     var marker = new google.maps.Marker({
@@ -138,8 +146,6 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
    marker.setMap(null);
     });
   }
-  PopulatePlaces(map);
-} // END OF INITIALIZE
 
 function GetTravelUri()
 {
@@ -188,11 +194,27 @@ function AddPlace(location)
 	 Push2Db(url, data, callbackAddplace)
 }
 var global ;
-function callbackGetplaces(data)
+function showMarker(LatLong)
 {
-	global = data;
-	console.log(data) ;
+	var myMarkerOptions = {
+   position: LatLong,
+   map: map
+	};
+	var marker = new google.maps.Marker(myMarkerOptions);
+}
+
+function callbackGetplaces(places)
+{
+	//places = data;
+	for(var i=0; i<places.length; ++i )
+	{
+		var latti = places[i]['fields'].latti ;
+		var longi = places[i]['fields'].longi ;
+		 var LatLong = new google.maps.LatLng(latti,longi);
+		 showMarker(LatLong) ;
+	}
 	//Populate from data
+	return data;
 }
 
 function GetPlaces()
