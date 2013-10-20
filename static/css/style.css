@@ -85,8 +85,9 @@
 
 #add_friends
 {
-	float:left;
+	float:right;
 	margin-top:10px;
+	margin-right:20px;
 	border-radius:2px;
 	background-color:#0c99f6;
 	height:30px;
@@ -294,4 +295,33 @@
 	background-color:#eee;
 }
   
+}
+.pop_up
+{
+	margin:auto;
+	width:495px;
+	height:10px;
+	padding:10px;
+	font-size:14px;
+	border-radius:2px;
+	border:1px solid #ccc;
+}
+
+.pop_up:focus
+{
+	outline:none;
+	border:1px solid #aaa;
+}
+
+.pop_up_button
+{	
+	border-radius:2px;
+	background-color:#0c99f6;
+	height:30px;
+	line-height:30px;
+	font-size:13px;
+	font-family:"Arial","sans-serif";
+	color:#fff;
+	padding:0px 12px;
+	cursor:pointer;
 }

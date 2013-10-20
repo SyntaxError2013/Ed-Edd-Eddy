@@ -19,7 +19,7 @@ def index(request):
         Travel.objects.get(uri=travel_uri)
         return HttpResponse('Some error occured. Try again!')
     except:
-        travel = Travel(name='Untitled Title', uri=travel_uri)
+        travel = Travel(name='Untitled Trip', uri=travel_uri)
         travel.save()
         return redirect('/travel/'+travel_uri)
 
@@ -29,7 +29,7 @@ def travel(request, travel_uri):
         email = travel.email
         token = channel.create_channel(travel_uri)
         return render_to_response('travelplanner/travel.html',
-                {'email':email, 'token':token})
+                {'email':email, 'token':token, 'travel_title':travel.name})
     except:
         return HttpResponse('Some error occured. <a href="/">Try again!</a>')
 
@@ -49,6 +49,7 @@ def travel_name_edit(request):
         if save:
             travel.name = name
             travel.save()
+            channel.send_message(travel_uri, 'Hello')
             return HttpResponse(travel.name)
     return HttpResponse('error')
 
