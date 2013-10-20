@@ -6,6 +6,7 @@ from django.core import serializers
 from django.shortcuts import redirect
 
 from google.appengine.api import users
+from google.appengine.api import mail
 
 from travelplanner.models import *
 from travelplanner.utils import travel_uri_generator
@@ -181,7 +182,7 @@ def place_get_activities(request):
     return HttpResonse('[]')
 
 @csrf_exempt
-def invite_firends(request):
+def invite_friends(request):
     if(request.method=='POST'):
         travel_uri = request.POST.get('travel_uri', None)
         to = request.POST.get('to', None)
@@ -209,6 +210,7 @@ def set_my_email(request):
         if travel and email:
             travel.email = email
             travel.save()
-            mail.send_mail(sender, to, subject, message)
+            mail.send_mail('admin@tripnote.com', email, 'Your new trip',
+                    '<a href="localhost:8080/travel/%s"></a>' % travel_uri)
             return HttpResponse('We have mailed you this unique url for future editing!')
     return HttpResponse('error')
