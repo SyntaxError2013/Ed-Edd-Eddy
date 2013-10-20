@@ -2,6 +2,7 @@
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.core import serializers
 
 from travelplanner.models import *
 
@@ -130,3 +131,33 @@ def activity_edit(request):
             activity.save()
             return HttpResponse(activity.id)
     return HttpResponse('error')
+
+@csrf_exempt
+def map_get_places(request):
+    if(request.method=='POST'):
+        travel_uri = request.POST.get('travel_uri', None)
+        
+        try:
+            travel = Travel.objects.get(uri=travel_uri)
+        except Travel.DoesNotExist:
+            travel = None
+        
+        place = Places.objects.filter(travel=travel)
+        places_json = serializers.serialize('json', place)
+        return HttpResponse(places_json, content_type="application/json")
+    return HttpResonse('[]')
+
+@csrf_exempt
+def place_get_activities(request):
+    if(request.method=='POST'):
+        place_id = request.POST.get('place_id', None)
+        
+        try:
+            place = Places.objects.get(id=place_id)
+        except Travel.DoesNotExist:
+            place = None
+        
+        activity = Activity.objects.filter(place=place)
+        activity_json = serializers.serialize('json', activity)
+        return HttpResponse(activity_json, content_type="application/json")
+    return HttpResonse('[]')
