@@ -5,6 +5,7 @@ from django.db import models
 class Travel(models.Model):
     name = models.CharField(max_length=200)
     uri = models.CharField(max_length=11, unique=True)
+    email = models.EmailField(max_length=75, null=True)
     
 class Places(models.Model):
     """
