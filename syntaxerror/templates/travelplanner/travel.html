@@ -282,34 +282,49 @@ function callbackGetplaces(places)
 	return data;
 }
 
+var g ;
+function callbackGetactivities(activities)
+{
+
+	g = activities ;
+	console.log(g);
+	$('#pn_'+activities[0]['fields'].place_id).append('<ul class="place_comments"> ') ;
+		for(var i=0; i< activities.length; ++i)
+			$('#pn_'+placeObject.place_id).append('	<li>'+ activities[i]['fields'].comment + '</li>');
+	$('#pn_'+activities[0]['fields'].place_id).append('</ul> ') ;
+
+}
+
+function GetActivities(place_id)
+{
+	var url = '/travel/api/place/get-activities';
+	var data = {
+		place_id : place_id
+	};
+	Push2Db(url, data, callbackGetactivities);
+}
+
 function PopulateSidePlaces (placeObject) 
 {
-	GetActivities(placeObject.place_id);
-	$('#place_node_wrap').append('
+	
+	$('#place_node_wrap').append('<div class="place_node" id="pn_' + placeObject.place_id +'">'+
+					'<div class="place_bar">'+
+						'<div class="place_marker"><i class="icon-map-marker"></i></div>'+
+						'<div class="place_name">'+place.location_name+'</div>'+
+						'<div class="date_time">'+'19th October 2014, 2:00 PM <ADD DATE TIME > '+'</div>'+
+					'</div>'+
+				'</div>');
+	 GetActivities(placeObject.place_id);
 
-<div class="place_node" id=p"pn_' + placeObject.place_id +'">
-					<div class="place_bar">
-						<div class="place_marker"><i class="icon-map-marker"></i></div>
-						<div class="place_name">'+place.location_name+'</div>
-						<div class="date_time">'+'19th October 2014, 2:00 PM <ADD DATE TIME > '+'</div>
-					</div>
 
-					<ul class="place_comments">
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhg fdgfdg  fdgd hf fdgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-					</ul>
-	</div>
 
-		');
 }
 
 function GetPlaces()
 {
 	var url = "/travel/api/map/get-places";
 	var uri = GetTravelUri();
-	data = { travel_uri : uri ,
-	};
+	data = { travel_uri : uri };
 	Push2Db(url, data, callbackGetplaces)
 }
 
@@ -336,6 +351,36 @@ function RemovePlace(location)
 	Push2Db(url, data, callbackRemoveplace) ;
 }
 
+function callbackAddactivity(msg)
+{
+	console.log("callbackAddactivity() :"+msg) ;
+
+}
+
+function AddActivity()
+{
+	var url = "/travel/api/map/add-activity";
+	var data = {
+		'place_id' : 1 ,
+		'comment' : "temp comm" ,
+	};
+	Push2Db(url, data, callbackAddactivity) ;	
+}
+/*
+function callbackRemoveactivity(msg)
+{
+	console.log("callbackRemoveactivity() :"+msg) ;
+}
+
+function RemoveActivity()
+{
+	var url = "/travel/api/map/remove-activity";
+	var data = {
+		'activity_id' : 1 
+	};
+	Push2Db(url, data, callbackAddactivity) ;	
+}
+*/
 function callbackSettripname(msg)
 {
 	//console.log(msg);
@@ -401,61 +446,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 					</ul>
 				</div>
 				
-				<div class="place_node">
-					<div class="place_bar">
-						<div class="place_marker"><i class="icon-map-marker"></i></div>
-						<div class="place_name">New Delhi</div>
-						<div class="date_time">19th October 2014, 2:00 PM</div>
-					</div>
-					<ul class="place_comments">
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjhfggfh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhg fdgfdg  fdgd hf fdgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-					</ul>
-				</div>
 				
-				<div class="place_node">
-					<div class="place_bar">
-						<div class="place_marker"><i class="icon-map-marker"></i></div>
-						<div class="place_name">New Delhi</div>
-						<div class="date_time">19th October 2014, 2:00 PM</div>
-					</div>
-					<ul class="place_comments">
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjhfggfh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhg fdgfdg  fdgd hf fdgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-					</ul>
-				</div>
-				
-				<div class="place_node">
-					<div class="place_bar">
-						<div class="place_marker"><i class="icon-map-marker"></i></div>
-						<div class="place_name">New Delhi</div>
-						<div class="date_time">19th October 2014, 2:00 PM</div>
-					</div>
-					<ul class="place_comments">
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjhfggfh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhg fdgfdg  fdgd hf fdgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-					</ul>
-				</div>
-				
-				<div class="place_node">
-					<div class="place_bar">
-						<div class="place_marker"><i class="icon-map-marker"></i></div>
-						<div class="place_name">New Delhi</div>
-						<div class="date_time">19th October 2014, 2:00 PM</div>
-					</div>
-					<ul class="place_comments">
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjhfggfh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhg fdgfdg  fdgd hf fdgjh</li>
-						<li>fdgfdgfhgjgjkhkhj jghjhg hjgh jghjghfgh fgfhgf hgfh hfj jghjhjhgjh</li>
-					</ul>
-				</div>
 			</div> <!-- end of place_node_wrap -->
 			</div>
 			</div>
