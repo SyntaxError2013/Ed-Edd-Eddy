@@ -44,6 +44,16 @@ function PopulatePlaces(map)
 }
 var markers = [];
 var map;
+var setClientSideStripName = 	function()
+	{
+		//console.log("execution check!");
+		$('#name_edit_input').hide();
+		$('#name_edit').html($(this).val());
+		//console.log($(this).val());
+		$('#name_edit').show() ;
+		//send ajax;
+		SetTripName($(this).val()) ;
+	}
 function initialize() {
 
 
@@ -56,16 +66,7 @@ $('#name_edit').dblclick(
 	}
 );
 $('#name_edit_input input').blur(
-	function()
-	{
-		//console.log("execution check!");
-		$('#name_edit_input').hide();
-		$('#name_edit').html($(this).val());
-		//console.log($(this).val());
-		$('#name_edit').show() ;
-		//send ajax;
-		SetTripName($(this).val()) ;
-	}
+        setClientSideStripName
 	);
 
 
@@ -437,11 +438,11 @@ function RemoveActivity()
 */
 function callbackSettripname(msg)
 {
-	//console.log(msg);
+//    $('#name_edit')
 }
 function SetTripName(name)
 {
-	//console.log(name);
+	console.log(name);
 	var url = "/travel/api/travel-name-edit";
 	var travel_uri = GetTravelUri();
 	var data = {
@@ -473,7 +474,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 		<div id="map-canvas"></div>
 	</div>
 
-		<div id="page_wrap"class="nano">
+		<div id="page_wrap" class="nano">
 			<div class="page content">
 				<div class="trip_name" id="name_edit_input" style="display:none" >
 					<input name="name" value="" />
@@ -503,7 +504,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 </body>
 
 <script>
-	//	$(document).load($(".nano").nanoScroller());
+	$(document).load($(".nano").nanoScroller());
 		
 	</script>
         <script>
@@ -513,7 +514,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
                 console.log('opened');
             }
             var onMessage = function(message) {
-                console.log('opened');
+                var a = message.data.split(',');
+                if(a.length>0)
+                {
+                    window[a[0]](a[1]);
+                }
             }
             var onError = function() {
                 console.log('on error');

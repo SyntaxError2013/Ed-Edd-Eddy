@@ -1,4 +1,5 @@
 # Create your views here.
+import json
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -49,7 +50,7 @@ def travel_name_edit(request):
         if save:
             travel.name = name
             travel.save()
-            channel.send_message(travel_uri, 'Hello')
+            channel.send_message(travel_uri, 'setClientSideTripName,%s' % name)
             return HttpResponse(travel.name)
     return HttpResponse('error')
 
