@@ -124,9 +124,11 @@ function SetTitle(location,m)
 	geocoder.geocode({'latLng': location}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[1]) {
-   
-        m.title = results[1].formatted_address;
-        console.log('title set');
+   		FullTitle = results[1].formatted_address
+   		//global = FullTitle ;
+   		m.SetTitle(FullTitle);
+        //m.setTitle(FullTitle.substr(0,FullTitle.index(" ")));
+        console.log('title set' + m.title);
     
       } else {
         console.log('No results found');
@@ -137,9 +139,7 @@ function SetTitle(location,m)
   });
 }
 function addMarker(location,map, add2Db) {
-	if(add2Db)
- 		AddPlace(location);
-
+	
  	markers.push(location);
     console.log(location) ;
     var marker = new google.maps.Marker({
@@ -149,6 +149,8 @@ function addMarker(location,map, add2Db) {
 
     });
     SetTitle(location,marker);
+
+    AddPlace(marker.position, marker.title);
 
   google.maps.event.addListener(marker, 'click', function(event) {
   	var index = markers.indexOf(marker.position);
@@ -193,8 +195,9 @@ function callbackAddplace(msg)
 	console.log("place added");
 }
 
-function AddPlace(location)
+function AddPlace(location, title)
 {
+	title = title || " " ;
 	var url = "/travel/api/map/add-place";
 	var uri = GetTravelUri();
 
@@ -205,7 +208,7 @@ function AddPlace(location)
 	 		latti : latti ,
 	 		longi : longi ,
 	 		properties : "0" ,
-	 		location_name : "dummy"
+	 		location_name : title ,
 	 		};
 
 	 Push2Db(url, data, callbackAddplace)
