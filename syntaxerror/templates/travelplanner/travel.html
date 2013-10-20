@@ -1,1 +1,246 @@
-<p>{{ travel_uri }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<style>
+html, body, #map-canvas {
+height: 100%;
+margin: 0px;
+padding: 0px
+}
+#panel {
+position: absolute;
+top: 5px;
+left: 50%;
+			margin-left: -180px;
+			z-index: 5;
+			background-color: #fff;
+padding: 5px;
+border: 1px solid #999;
+}
+</style>
+<title>Places search box</title>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script>
+// This example adds a search box to a map, using the
+// Google Places autocomplete feature. People can enter geographical searches.
+// The search box will return a pick list containing
+// a mix of places and predicted search terms.
+
+function PopulatePlaces(map)
+{
+	places = GetPlaces();
+}
+
+function initialize() {
+var delhi = new google.maps.LatLng(28.613459424004414,77.16796875);
+	var markers = [];
+	var SearchMarkers = [];
+	var map = new google.maps.Map(document.getElementById('map-canvas'), {
+		 zoom: 4,
+		center: delhi,
+mapTypeId: google.maps.MapTypeId.ROADMAP
+});
+
+/*var defaultBounds = new google.maps.LatLngBounds(
+		new google.maps.LatLng(-33.8902, 151.1759),
+		new google.maps.LatLng(-33.8474, 151.2631));
+map.fitBounds(defaultBounds);
+*/
+// Create the search box and link it to the UI element.
+var input = document.getElementById('target');
+var searchBox = new google.maps.places.SearchBox(input);
+
+// [START region_getplaces]
+// Listen for the event fired when the user selects an item from the
+// pick list. Retrieve the matching places for that item.
+google.maps.event.addListener(searchBox, 'places_changed', function() {
+		var places = searchBox.getPlaces();
+
+		for (var i = 0, marker; marker = SearchMarkers[i]; i++) {
+		marker.setMap(null);
+		}
+
+		// For each place, get the icon, place name, and location.
+		SearchMarkers = [];
+		var bounds = new google.maps.LatLngBounds();
+		for (var i = 0, place; place = places[i]; i++) {
+		var image = {
+url: place.icon,
+size: new google.maps.Size(71, 71),
+origin: new google.maps.Point(0, 0),
+anchor: new google.maps.Point(17, 34),
+scaledSize: new google.maps.Size(25, 25)
+};
+
+// Create a marker for each place.
+var marker = new google.maps.Marker({
+map: map,
+icon: image,
+title: place.name,
+position: place.geometry.location
+});
+
+SearchMarkers.push(marker);
+
+bounds.extend(place.geometry.location);
+}
+
+for(var i=0, loc; loc = markers[i]; ++i )
+	bounds.extend(loc) ;
+
+map.fitBounds(bounds);
+//map.setZoom(7) ;
+});
+// [END region_getplaces]
+
+// Bias the SearchBox results towards places that are within the bounds of the
+// current map's viewport.
+google.maps.event.addListener(map, 'bounds_changed', function() {
+		var bounds = map.getBounds();
+		searchBox.setBounds(bounds);
+		});
+
+// END OF SEARCH
+
+// ADD  AND DELETE MARKER 
+ google.maps.event.addListener(map, 'click', function(event) {
+      addMarker(event.latLng);
+    });
+
+ function addMarker(location) {
+ 	AddPlace(location);
+ 	markers.push(location);
+    console.log(location) ;
+    var marker = new google.maps.Marker({
+      position: location,
+    //  draggable: true,
+      map: map ,
+
+     // title : getNameFromLatLong(location)
+    });
+  
+
+  google.maps.event.addListener(marker, 'click', function(event) {
+  	var index = markers.indexOf(marker.position);
+  	console.log("loci:"+marker.position) ;
+  	console.log(markers.length);
+  	if(index > -1)
+  		markers.splice(index, 1);
+
+  	console.log(markers.length);
+	
+  	 RemovePlace(marker.position)
+   marker.setMap(null);
+    });
+  }
+  PopulatePlaces(map);
+} // END OF INITIALIZE
+
+function GetTravelUri()
+{
+	var url = $(location).attr('href');
+	var travel_uri = url.substr(url.lastIndexOf("/")+1) ;
+
+	travel_uri = "asdf" ;
+	return travel_uri
+}
+
+
+function Push2Db(url, data, callback)
+{
+	$.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        success: callback ,
+        error:function(){
+            $("#result").html('There is error while submit');
+        }
+    });
+}
+
+function callbackAddplace(msg)
+{
+	console.log(msg) ;
+	console.log("place added");
+}
+
+function AddPlace(location)
+{
+	var url = "/travel/api/map/add-place";
+	var uri = GetTravelUri();
+
+	var latti = location.lb;
+	var  longi = location.mb;
+
+	data = { travel_uri : uri ,
+	 		latti : latti ,
+	 		longi : longi ,
+	 		properties : "0" ,
+	 		location_name : "dummy"
+	 		};
+
+	 Push2Db(url, data, callbackAddplace)
+}
+var global ;
+function callbackGetplaces(data)
+{
+	global = data;
+	console.log(data) ;
+	//Populate from data
+}
+
+function GetPlaces()
+{
+	var url = "/travel/api/map/get-places";
+	var uri = GetTravelUri();
+	data = { travel_uri : uri ,
+	 		};
+ 	Push2Db(url, data, callbackGetplaces)
+}
+
+function callbackRemoveplace(msg)
+{
+	console.log(msg) ;
+	console.log("place removed");
+}
+
+function RemovePlace(location)
+{
+	loci = location ;
+	var url = "/travel/api/map/remove-place";
+	var uri = GetTravelUri();
+
+	var latti = location.lb;
+	var  longi = location.mb;
+
+	data = { travel_uri : uri ,
+	 		latti : latti ,
+	 		longi : longi ,
+	 		};
+
+	 Push2Db(url, data, callbackRemoveplace) ;
+}
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+<style>
+#target {
+	width: 345px;
+}
+</style>
+</head>
+<body>
+<div id="panel">
+<input id="target" type="text" placeholder="Search Box">
+</div>
+<div id="map-canvas"></div>
+</body>
+</html>

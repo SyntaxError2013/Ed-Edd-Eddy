@@ -33,6 +33,7 @@ def travel_name_edit(request):
 @csrf_exempt
 def map_add_place(request):
     if request.method == 'POST':
+        print request.POST
         travel_uri = request.POST.get('travel_uri', None) 
         latti = request.POST.get('latti', None)
         longi = request.POST.get('longi', None)
