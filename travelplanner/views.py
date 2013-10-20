@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.shortcuts import redirect
 
+from google.appengine.api import users
+
 from travelplanner.models import *
 from travelplanner.utils import travel_uri_generator
+from travelplanner.utils import is_loggedin
 
 def index(request):
     travel_uri = travel_uri_generator()
@@ -14,10 +17,17 @@ def index(request):
         Travel.objects.get(uri=travel_uri)
         return HttpResponse('Some error occured. Try again!')
     except:
+        travel = Travel(name='Trip Title', uri=travel_uri)
+        travel.save()
         return redirect('/travel/'+travel_uri)
 
 def travel(request, travel_uri):
-    return render_to_response('travelplanner/travel.html', {'travel_uri': travel_uri})
+    try:
+        travel = Travel.objects.get(uri=travel_uri)
+        email = travel.email
+        return render_to_response('travelplanner/travel.html', {'travel_uri': travel_uri, 'email':email})
+    except:
+        return HttpResponse('Some error occured. <a href="/">Try again!</a>')
 
 @csrf_exempt
 def travel_name_edit(request):
@@ -169,3 +179,36 @@ def place_get_activities(request):
         activity_json = serializers.serialize('json', activity)
         return HttpResponse(activity_json, content_type="application/json")
     return HttpResonse('[]')
+
+@csrf_exempt
+def invite_firends(request):
+    if(request.method=='POST'):
+        travel_uri = request.POST.get('travel_uri', None)
+        to = request.POST.get('to', None)
+        subject = request.POST.get('subject', None)
+        message = request.POST.get('message', None)
+
+        try:
+            travel = Travel.objects.get(uri=travel_uri)
+            sender = travel.sender
+            mail.send_mail(sender, to, subject, message)
+            return HttPResponse('invite sent to %s' % to)
+        except:
+            travel = None
+    return HttPResponse('error')
+
+@csrf_exempt
+def set_my_email(request):
+    if(request.method=='POST'):
+        travel_uri = request.POST.get('travel_uri', None)
+        email = request.POST.get('email', None)
+        try:
+            travel = Travel.objects.get(uri=travel_uri)
+        except:
+            travel = None
+        if travel and email:
+            travel.email = email
+            travel.save()
+            mail.send_mail(sender, to, subject, message)
+            return HttpResponse('We have mailed you this unique url for future editing!')
+    return HttpResponse('error')
